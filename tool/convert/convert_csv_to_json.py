@@ -11,6 +11,7 @@ if len(csv_files) == 0: print("CSV data files are not found.")
 for cf in csv_files:
     json_list = []
     output_json = "../../data/" + os.path.splitext(os.path.basename(cf))[0] + ".json"
+    # csvのエンコード形式がutf-8 with BOMだったため
     with open(cf, 'r', encoding='utf_8_sig') as f:
         for row in csv.DictReader(f):
             json_list.append(row)
