@@ -9,10 +9,10 @@ import datetime
 import pandas as pd
 from pprint import pprint
 
-patients_DATA_CSV_FILE_NAME = "440001_oita_covid19_patients.csv"
+PATIENTS_DATA_CSV_FILE_NAME = "440001_oita_covid19_patients.csv"
 
 def main():
-    patients_data_csv_file = "../../static/data/" + patients_DATA_CSV_FILE_NAME
+    patients_data_csv_file = "../../static/data/" + PATIENTS_DATA_CSV_FILE_NAME
     if os.path.exists(patients_data_csv_file) == False:
         print("CSV data files are not found.")
         sys.exit(1)
