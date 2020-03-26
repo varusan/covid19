@@ -47,10 +47,6 @@ def import_csv_to_dict(csv_file, encoding='utf_8_sig'):
     return json.loads(json.dumps(json_list))
 
 def generate_patients(data):
-#    patients = 
-#        "date": datetime.datetime.now().strftime("%Y/%m/%d %H:%M"),
-#        "data": [],
-#    }
     patients = []
     for d in data:
         p = {
