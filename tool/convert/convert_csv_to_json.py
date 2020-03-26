@@ -11,18 +11,23 @@ from copy import deepcopy
 from pprint import pprint
 
 PATIENTS_DATA_CSV_FILE_NAME = "440001_oita_covid19_patients.csv"
+INSPECTIONS_DATA_CSV_FILE_NAME = "440001_oita_covid19_inspections.csv"
 
 def main():
-    import_csv_file = os.path.dirname(__file__) + "/../../static/data/" + PATIENTS_DATA_CSV_FILE_NAME
+    patients_data_csv_file = os.path.dirname(__file__) + "/../../static/data/" + PATIENTS_DATA_CSV_FILE_NAME
+    inspections_data_csv_file = os.path.dirname(__file__) + "/../../static/data/" + INSPECTIONS_DATA_CSV_FILE_NAME
     export_json_file = os.path.dirname(__file__) + "/../../data/data.json"
 
-    if os.path.exists(import_csv_file) == False:
+    if os.path.exists(patients_data_csv_file) == False or os.path.exists(inspections_data_csv_file) == False:
         print("CSV data files are not found.")
         sys.exit(1)
 
-    data = import_csv_to_dict(import_csv_file, encoding='utf_8_sig')
-    patients = generate_patients(data)
-    patients_summary = generate_patients_summary(data)
+    patients_data = import_csv_to_dict(patients_data_csv_file, encoding='utf_8_sig')
+    inspections_data = import_csv_to_dict(inspections_data_csv_file, encoding='utf_8_sig')
+
+    patients = generate_patients(patients_data)
+    patients_summary = generate_patients_summary(patients_data)
+    inspections_summary = generate_inspections_summary(inspections_data)
 
     today_date_string = datetime.datetime.now().strftime("%Y/%m/%d %H:%M")
     data_json = {
@@ -33,6 +38,10 @@ def main():
         "patients_summary": {
             "date": today_date_string,
             "data": patients_summary,
+        },
+        "inspections_summary": {
+            "date": today_date_string,
+            "data": inspections_summary,
         }
     }
 
@@ -62,20 +71,21 @@ def generate_patients(data):
     return patients
 
 def generate_patients_summary(data):
-    count_date = [ datetime.datetime.strptime(d["公表_年月日"], '%Y-%m-%d') for d in data ]
-    start_date = sorted(count_date)[0]
-    end_date   = start_date + datetime.timedelta(days=len(count_date))
+    counted_date = [ datetime.datetime.strptime(d["公表_年月日"], '%Y-%m-%d') for d in data ]
+
+    start_date = sorted(counted_date)[0]
+    end_date   = datetime.datetime.now()
 
     # 日付に対して値が0のデータを作る
     df_date = {}
     for i in daterange(start_date, end_date):
         df_date[i] = 0
 
-    df_summary = {}
-    for date, total in collections.Counter(count_date).items():
-        df_summary[date] = total
+    df_patients_summary = {}
+    for date, total in collections.Counter(counted_date).items():
+        df_patients_summary[date] = total
 
-    df = deepmerge(df_date, df_summary)
+    df = deepmerge(df_date, df_patients_summary)
 
     patients_summary = []
     for date, total in df.items():
@@ -86,6 +96,35 @@ def generate_patients_summary(data):
         patients_summary.append(ps)
     
     return patients_summary
+
+def generate_inspections_summary(data):
+    parsed_data = [ { "日付": datetime.datetime.strptime(d["日付"], "%Y-%m-%d"), "小計": int(d["検査人数"]) } for d in data ]
+
+    counted_date = [ pd["日付"] for pd in parsed_data ]
+    start_date = sorted(counted_date)[0]
+    end_date   = datetime.datetime.now()
+
+    # 日付に対して値が0のデータを作る
+    df_date = {}
+    for i in daterange(start_date, end_date): df_date[i] = 0
+
+    df_inspections_summary = {}
+    for pd in parsed_data: 
+        df_inspections_summary[pd["日付"]] = pd["小計"]
+
+    df = deepmerge(df_date, df_inspections_summary)
+
+    inspections_summary = []
+    for date, total in df.items():
+        ps = {
+            "日付": date.strftime("%Y-%m-%d"),
+            "小計": total,
+        }
+        inspections_summary.append(ps)
+    
+    return inspections_summary
+
+
     
 
 def deepmerge(src, update):
@@ -98,7 +137,7 @@ def deepmerge(src, update):
     return result
 
 def daterange(start_date, end_date):
-    for n in range((end_date - start_date).days):
+    for n in range((end_date - start_date).days + 1):
         yield start_date + datetime.timedelta(n)
 
 main()
