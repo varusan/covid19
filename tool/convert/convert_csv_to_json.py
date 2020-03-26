@@ -40,7 +40,8 @@ def main():
         "inspections_summary": {
             "date": today_date_string,
             "data": inspections_summary,
-        }
+        },
+        "lastUpdate": today_date_string
     }
 
     with open(export_json_file, 'w') as f:
