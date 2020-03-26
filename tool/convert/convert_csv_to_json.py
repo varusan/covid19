@@ -3,12 +3,10 @@
 import json 
 import csv
 import os
-import glob
 import sys
 import datetime
 import collections 
 from copy import deepcopy
-from pprint import pprint
 
 PATIENTS_DATA_CSV_FILE_NAME = "440001_oita_covid19_patients.csv"
 INSPECTIONS_DATA_CSV_FILE_NAME = "440001_oita_covid19_inspections.csv"
