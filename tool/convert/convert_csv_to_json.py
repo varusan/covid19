@@ -1,11 +1,11 @@
 #!/bin/python
 
-import json 
+import json
 import csv
 import os
 import sys
 import datetime
-import collections 
+import collections
 from copy import deepcopy
 
 PATIENTS_DATA_CSV_FILE_NAME = "440001_oita_covid19_patients.csv"
@@ -92,7 +92,7 @@ def generate_patients_summary(data):
             "小計": total,
         }
         patients_summary.append(ps)
-    
+
     return patients_summary
 
 def generate_inspections_summary(data):
@@ -107,7 +107,7 @@ def generate_inspections_summary(data):
     for i in daterange(start_date, end_date): df_date[i] = 0
 
     df_inspections_summary = {}
-    for pd in parsed_data: 
+    for pd in parsed_data:
         df_inspections_summary[pd["日付"]] = pd["小計"]
 
     df = deepmerge(df_date, df_inspections_summary)
@@ -119,11 +119,11 @@ def generate_inspections_summary(data):
             "小計": total,
         }
         inspections_summary.append(ps)
-    
+
     return inspections_summary
 
 
-    
+
 
 def deepmerge(src, update):
     result = deepcopy(src)
