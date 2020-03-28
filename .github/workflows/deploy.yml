@@ -28,6 +28,16 @@ jobs:
       - run: yarn run test
       - run: yarn run generate:deploy --fail-on-page-error
 
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+
+      - name: Generate data.json
+        run: python tool/convert/convert_csv_to_json.py
+        env:
+          TZ: 'Asia/Tokyo'
+
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
