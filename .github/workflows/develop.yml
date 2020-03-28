@@ -39,6 +39,18 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
 
+      - name: commit data.json
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m '[ci skip] Update Data (commited by GitHub Actions)" -a'
+
+      - name: Push data
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: development
+
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
