@@ -43,7 +43,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m '[ci skip] Update Data (commited by GitHub Actions)" -a'
+          git commit -am "[ci skip] Update Data (commited by GitHub Actions)"
 
       - name: Push data
         uses: ad-m/github-push-action@master
