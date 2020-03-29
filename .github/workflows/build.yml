@@ -10,6 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+
+      - name: Generate data.json
+        run: python tool/convert/convert_csv_to_json.py
+        env:
+          TZ: 'Asia/Tokyo'   
+
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -26,16 +36,6 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn run test
       - run: yarn run generate:deploy --fail-on-page-error
-
-      - name: Setup Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.7'
-
-      - name: Generate data.json
-        run: python tool/convert/convert_csv_to_json.py
-        env:
-          TZ: 'Asia/Tokyo'   
 
       - name: archive dist
         uses: actions/upload-artifact@v1
