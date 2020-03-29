@@ -11,12 +11,13 @@ from copy import deepcopy
 PATIENTS_DATA_CSV_FILE_NAME = "440001_oita_covid19_patients.csv"
 INSPECTIONS_DATA_CSV_FILE_NAME = "440001_oita_covid19_inspections.csv"
 
+
 def main():
     patients_data_csv_file = os.path.dirname(__file__) + "/../../static/data/" + PATIENTS_DATA_CSV_FILE_NAME
     inspections_data_csv_file = os.path.dirname(__file__) + "/../../static/data/" + INSPECTIONS_DATA_CSV_FILE_NAME
     export_json_file = os.path.dirname(__file__) + "/../../data/data.json"
 
-    if os.path.exists(patients_data_csv_file) == False or os.path.exists(inspections_data_csv_file) == False:
+    if not os.path.exists(patients_data_csv_file) or not os.path.exists(inspections_data_csv_file):
         print("CSV data files are not found.")
         sys.exit(1)
 
@@ -51,8 +52,10 @@ def main():
 def import_csv_to_dict(csv_file, encoding='utf_8_sig'):
     json_list = []
     with open(csv_file, 'r', encoding=encoding) as f:
-        for row in csv.DictReader(f): json_list.append(row)
+        for row in csv.DictReader(f):
+            json_list.append(row)
     return json.loads(json.dumps(json_list))
+
 
 def generate_patients(data):
     patients = []
@@ -69,11 +72,12 @@ def generate_patients(data):
 
     return patients
 
+
 def generate_patients_summary(data):
     counted_date = [ datetime.datetime.strptime(d["公表_年月日"], '%Y-%m-%d') for d in data ]
 
     start_date = sorted(counted_date)[0]
-    end_date   = datetime.datetime.now()
+    end_date = datetime.datetime.now()
 
     # 日付に対して値が0のデータを作る
     df_date = {}
@@ -96,12 +100,13 @@ def generate_patients_summary(data):
 
     return patients_summary
 
+
 def generate_inspections_summary(data):
     parsed_data = [ { "日付": datetime.datetime.strptime(d["日付"], "%Y-%m-%d"), "小計": int(d["検査人数"]) } for d in data ]
 
-    counted_date = [ pd["日付"] for pd in parsed_data ]
+    counted_date = [pd["日付"] for pd in parsed_data]
     start_date = sorted(counted_date)[0]
-    end_date   = datetime.datetime.now()
+    end_date = datetime.datetime.now()
 
     # 日付に対して値が0のデータを作る
     df_date = {}
@@ -124,8 +129,6 @@ def generate_inspections_summary(data):
     return inspections_summary
 
 
-
-
 def deepmerge(src, update):
     result = deepcopy(src)
     for k, v in update.items():
@@ -135,9 +138,11 @@ def deepmerge(src, update):
             result[k] = deepcopy(v)
     return result
 
+
 def daterange(start_date, end_date):
     for n in range((end_date - start_date).days + 1):
         yield start_date + datetime.timedelta(n)
+
 
 if __name__ == "__main__":
     main()
