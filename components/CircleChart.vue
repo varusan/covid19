@@ -66,9 +66,9 @@ export default {
   },
   computed: {
     displayInfo() {
-      let chartData = this.chartData[this.chartData.length - 1]
-      let total     = chartData.cumulative.toLocaleString()
-      let remaining = chartData.transition.toLocaleString()
+      const chartData = this.chartData[this.chartData.length - 1]
+      const total = chartData.cumulative.toLocaleString()
+      const remaining = chartData.transition.toLocaleString()
       return {
         lText: remaining + '/' + total,
         sText: this.info,
@@ -79,17 +79,17 @@ export default {
       const colorArray = ['#00B849', '#D9D9D9']
       return {
         labels: this.chartData.map(d => {
-          return d.label
+          return this.$t(d.label)
         }),
         datasets: [
           {
             label: this.chartData.map(d => {
-              return d.label
+              return this.$t(d.label)
             }),
             data: this.chartData.map(d => {
               return d.transition
             }),
-            backgroundColor: this.chartData.map((d, index) => {
+            backgroundColor: this.chartData.map((_, index) => {
               return colorArray[index]
             }),
             borderWidth: 0
@@ -98,22 +98,22 @@ export default {
       }
     },
     displayOption() {
-      const unit = this.unit
+      const unitBed = this.unit
+      const unitPerson = this.$t('人')
+      const label = this.$t('総病床数')
       const chartData = this.chartData
       return {
         tooltips: {
           displayColors: false,
           callbacks: {
             label(tooltipItem) {
-              /* return (
-                parseInt(
-                  chartData[tooltipItem.index].transition
-                ).toLocaleString() + unit
-              ) */
-              return `${chartData[tooltipItem.index].transition} ${
-                tooltipItem.index === 1 ? unit : '人'
-              } (総病床数: ${chartData[0].transition +
-                chartData[1].transition}${unit})`
+              const index = tooltipItem.index
+              const numerator = chartData[index].transition
+              const numeratorUnit = index === 1 ? unitBed : unitPerson
+              const denominator =
+                chartData[0].transition + chartData[1].transition
+              const denominatorLabel = label
+              return `${numerator} ${numeratorUnit} (${denominatorLabel}: ${denominator}${unitBed})`
             },
             title(tooltipItem, data) {
               return data.labels[tooltipItem[0].index]
@@ -140,4 +140,4 @@ export default {
 .link {
   text-decoration: none;
 }
-</stylela>
+</style>
