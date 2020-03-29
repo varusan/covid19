@@ -4,7 +4,7 @@
       :title="$t('年代別陽性患者数')"
       :title-id="'patients-by-age'"
       :chart-data="ageGraph"
-      :date="'2020-03-28'"
+      :date="age.lastUpdate"
       :unit="$t('人')"
       :info="$t('累計値')"
       :url="'https://www.stopcovid19.jp/'"
