@@ -34,7 +34,7 @@
 
       <div class="SideNavigation-Language">
         <label class="SideNavigation-LanguageLabel" for="LanguageSelector">
-          {{ $t('多言語対応選択メニュー') }}
+          {{ $t('言語選択') }}
         </label>
         <LanguageSelector />
       </div>
