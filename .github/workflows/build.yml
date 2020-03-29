@@ -35,7 +35,7 @@ jobs:
       - name: Generate data.json
         run: python tool/convert/convert_csv_to_json.py
         env:
-          TZ: 'Asia/Tokyo'
+          TZ: 'Asia/Tokyo'   
 
       - name: archive dist
         uses: actions/upload-artifact@v1
