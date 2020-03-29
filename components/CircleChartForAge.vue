@@ -66,17 +66,24 @@ export default {
   },
   computed: {
     displayInfo() {
+      // TODO: Display total patients.
       const chartData = this.chartData[this.chartData.length - 1]
       const total = chartData.cumulative.toLocaleString()
-      const remaining = chartData.transition.toLocaleString()
       return {
-        lText: remaining + '/' + total,
+        lText: total,
         sText: this.info,
         unit: this.unit
       }
     },
     displayData() {
-      const colorArray = ['#00B849', '#D9D9D9']
+      const colorArray = [
+        'rgb(0, 100, 0)',
+        '#008830',
+        '#00B849',
+        '#00D154',
+        '#00EB5E',
+        '#00EB5E'
+      ]
       return {
         labels: this.chartData.map(d => {
           return this.$t(d.label)
@@ -100,7 +107,7 @@ export default {
     displayOption() {
       const unitBed = this.unit
       const unitPerson = this.$t('人')
-      const label = this.$t('総病床数')
+      //      const label = this.$t('総病床数')
       const chartData = this.chartData
       return {
         tooltips: {
@@ -110,10 +117,7 @@ export default {
               const index = tooltipItem.index
               const numerator = chartData[index].transition
               const numeratorUnit = index === 1 ? unitBed : unitPerson
-              const denominator =
-                chartData[0].transition + chartData[1].transition
-              const denominatorLabel = label
-              return `${numerator} ${numeratorUnit} (${denominatorLabel}: ${denominator}${unitBed})`
+              return `${numerator} ${numeratorUnit}`
             },
             title(tooltipItem, data) {
               return data.labels[tooltipItem[0].index]
@@ -135,7 +139,8 @@ export default {
 .Graph-Desc {
   margin: 10px 0;
   font-size: 12px;
-  color: $gray-3;
+  //  color: $gray-3;
+  color: red;
 }
 .link {
   text-decoration: none;
