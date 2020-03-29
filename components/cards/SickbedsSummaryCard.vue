@@ -3,7 +3,6 @@
     <circle-chart
       :title="$t('入院患者数と残り病床数')"
       :title-id="'patietns-and-sickedbeds'"
-      :chartId="'any'"
       :chart-data="sickbedsGraph"
       :date="'2020-03-28'"
       :unit="$t('床')"
