@@ -66,10 +66,11 @@ export default {
   },
   computed: {
     displayInfo() {
+      let chartData = this.chartData[this.chartData.length - 1]
+      let total     = chartData.cumulative.toLocaleString()
+      let remaining = chartData.transition.toLocaleString()
       return {
-        lText: this.chartData[
-          this.chartData.length - 1
-        ].cumulative.toLocaleString(),
+        lText: remaining + '/' + total,
         sText: this.info,
         unit: this.unit
       }
