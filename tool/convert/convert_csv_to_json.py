@@ -17,7 +17,8 @@ def main():
     inspections_data_csv_file = os.path.dirname(__file__) + "/../../static/data/" + INSPECTIONS_DATA_CSV_FILE_NAME
     export_json_file = os.path.dirname(__file__) + "/../../data/data.json"
 
-    if not os.path.exists(patients_data_csv_file) or not os.path.exists(inspections_data_csv_file):
+    if not os.path.exists(patients_data_csv_file) or not os.path.exists(
+            inspections_data_csv_file):
         print("CSV data files are not found.")
         sys.exit(1)
 
@@ -25,7 +26,8 @@ def main():
     inspections_data = import_csv_to_dict(inspections_data_csv_file, encoding='utf_8_sig')
 
     patients = generate_patients(patients_data)
-    patients_summary = generate_patients_summary(patients_data)
+    patients_summary_by_date = generate_patients_summary_by_date(patients_data)
+    patients_summary_by_age = generate_patients_summary_by_age(patients_data)
     inspections_summary = generate_inspections_summary(inspections_data)
 
     today_date_string = datetime.datetime.now().strftime("%Y/%m/%d %H:%M")
@@ -36,11 +38,15 @@ def main():
         },
         "patients_summary": {
             "date": today_date_string,
-            "data": patients_summary,
+            "data": patients_summary_by_date,
         },
         "inspections_summary": {
             "date": today_date_string,
             "data": inspections_summary,
+        },
+        "age": {
+            "date": today_date_string,
+            "data": patients_summary_by_age,
         },
         "lastUpdate": today_date_string
     }
@@ -73,36 +79,36 @@ def generate_patients(data):
     return patients
 
 
-def generate_patients_summary(data):
-    counted_date = [ datetime.datetime.strptime(d["公表_年月日"], '%Y-%m-%d') for d in data ]
+def generate_patients_summary_by_date(data):
+    summary_by_date = summarize_data(data, "公表_年月日")
 
-    start_date = sorted(counted_date)[0]
-    end_date = sorted(counted_date)[-1]
+    df_patients_summary = {}
+    for k, v in summary_by_date.items():
+        df_patients_summary[datetime.datetime.strptime(k, '%Y-%m-%d')] = v
 
     # 日付に対して値が0のデータを作る
+    start_date = sorted(list(df_patients_summary.keys()))[0]
+    end_date = sorted(list(df_patients_summary.keys()))[-1]
+
     df_date = {}
     for i in daterange(start_date, end_date):
         df_date[i] = 0
 
-    df_patients_summary = {}
-    for date, total in collections.Counter(counted_date).items():
-        df_patients_summary[date] = total
-
     df = deepmerge(df_date, df_patients_summary)
 
-    patients_summary = []
+    patients_summary_by_date = []
     for date, total in df.items():
         ps = {
             "日付": date.strftime("%Y-%m-%d"),
             "小計": total,
         }
-        patients_summary.append(ps)
+        patients_summary_by_date.append(ps)
 
-    return patients_summary
+    return patients_summary_by_date
 
 
 def generate_inspections_summary(data):
-    parsed_data = [ { "日付": datetime.datetime.strptime(d["日付"], "%Y-%m-%d"), "小計": int(d["検査人数"]) } for d in data ]
+    parsed_data = [{"日付": datetime.datetime.strptime(d["日付"], "%Y-%m-%d"), "小計": int(d["検査人数"])} for d in data]
 
     counted_date = [pd["日付"] for pd in parsed_data]
     start_date = sorted(counted_date)[0]
@@ -110,7 +116,8 @@ def generate_inspections_summary(data):
 
     # 日付に対して値が0のデータを作る
     df_date = {}
-    for i in daterange(start_date, end_date): df_date[i] = 0
+    for i in daterange(start_date, end_date):
+        df_date[i] = 0
 
     df_inspections_summary = {}
     for pd in parsed_data:
@@ -127,6 +134,34 @@ def generate_inspections_summary(data):
         inspections_summary.append(ps)
 
     return inspections_summary
+
+
+def generate_patients_summary_by_age(data):
+    df_patients_summary_by_age = summarize_data(data, "年代")
+    df_age = {}
+    for i in range(10, 110, 10):
+        df_age[str(i) + "代"] = 0
+
+    df = deepmerge(df_age, df_patients_summary_by_age)
+    patients_summary_by_age = {
+        "10代以下": df["10代"],
+        "20代〜30代": df["20代"] + df["30代"],
+        "40代〜50代": df["40代"] + df["50代"],
+        "60代〜70代": df["60代"] + df["70代"],
+        "80代以上": df["80代"] + df["90代"] + df["100代"],
+    }
+
+    return patients_summary_by_age
+
+
+def summarize_data(data, key):
+    counted = [d[key] for d in data]
+
+    summary = {}
+    for val, total in collections.Counter(counted).items():
+        summary[val] = total
+
+    return summary
 
 
 def deepmerge(src, update):
