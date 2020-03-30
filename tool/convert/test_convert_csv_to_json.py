@@ -116,7 +116,7 @@ No,全国地方公共団体コード,都道府県名,市区町村名,公表_年�
 }]
 '''.strip()
 
-        result = ctj.generate_patients_summary(self.patients_data)
+        result = ctj.generate_patients_summary_by_date(self.patients_data)
         expect = json.loads(expect_json)
 
         self.assertListEqual(result, expect)
@@ -145,6 +145,22 @@ No,全国地方公共団体コード,都道府県名,市区町村名,公表_年�
         expect = json.loads(expect_json)
 
         self.assertListEqual(result, expect)
+
+    def test_generate_patients_summary_by_age(self):
+        expect_json = '''
+{
+  "10代以下": 1,
+  "20代〜30代": 2,
+  "40代〜50代": 1,
+  "60代〜70代": 1,
+  "80代以上": 1
+}
+'''.strip()
+
+        result = ctj.generate_patients_summary_by_age(self.patients_data)
+        expect = json.loads(expect_json)
+
+        self.assertDictEqual(result, expect)
 
 
 if __name__ == "__main__":
