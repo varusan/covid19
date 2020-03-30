@@ -77,7 +77,7 @@ def generate_patients_summary(data):
     counted_date = [ datetime.datetime.strptime(d["公表_年月日"], '%Y-%m-%d') for d in data ]
 
     start_date = sorted(counted_date)[0]
-    end_date = datetime.datetime.now()
+    end_date = sorted(counted_date)[-1]
 
     # 日付に対して値が0のデータを作る
     df_date = {}
@@ -106,7 +106,7 @@ def generate_inspections_summary(data):
 
     counted_date = [pd["日付"] for pd in parsed_data]
     start_date = sorted(counted_date)[0]
-    end_date = datetime.datetime.now()
+    end_date = sorted(counted_date)[-1]
 
     # 日付に対して値が0のデータを作る
     df_date = {}
