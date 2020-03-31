@@ -33,7 +33,9 @@ jobs:
     name: test_generate_test_script
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v1
         with:
           python-version: '3.7'
       - name: exec unittest
