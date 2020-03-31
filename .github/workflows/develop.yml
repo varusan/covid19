@@ -11,6 +11,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+
+      - name: Generate data.json
+        run: python tool/convert/convert_csv_to_json.py
+        env:
+          TZ: 'Asia/Tokyo'
+
+      - name: commit data.json
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "[ci skip] Update Data (commited by GitHub Actions)"
+
+      - name: Push data
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: development
+
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -28,16 +50,6 @@ jobs:
       - run: yarn run test
       - run: yarn run generate:dev --fail-on-page-error
       - run: "echo \"User-agent: *\nDisallow: /\" > ./dist/robots.txt"
-
-      - name: Setup Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.7'
-
-      - name: Generate data.json
-        run: python tool/convert/convert_csv_to_json.py
-        env:
-          TZ: 'Asia/Tokyo'
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
