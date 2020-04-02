@@ -156,6 +156,7 @@
   "サイドメニュー項目を開く": "Open side menu items",
   "サイドメニュー項目を閉じる": "Close side menu items",
   "お子様をお持ちの皆様へ": "To families with children",
+  "中小企業の皆様へ": "To companies in Oita",
   "県民の皆様へ": "To the residents of Oita",
   "大分県 新型コロナウイルスに関するお知らせ": "COVID-19 Information (Oita Pref.)",
   "大分市 新型コロナウイルスに関連する情報": "COVID-19 Information (Oita City)",
@@ -301,11 +302,11 @@
   "（都営交通お客様センター）": "(Toei Transportation Customer Center)",
   "大分県": "Oita Prefecture",
   "年代別陽性患者数": "Number of patients by generation",
-  "10代未満〜10代": "Under 10s〜10s",
+  "10代以下": "〜10s",
   "20代〜30代": "20s〜30s",
   "40代〜50代": "40s〜50s",
   "60代〜70代": "60s〜70s",
   "70代〜80代": "70s〜80s",
-  "80代〜90代以上": "80s〜90s over",
+  "80代以上": "80s〜",
   "言語選択": "Select language"
 }

@@ -135,6 +135,12 @@ export default Vue.extend({
           link: 'https://www.pref.oita.jp/site/bosaianzen/shingatacorona.html'
         },
         {
+          icon: 'mdi-domain',
+          title: this.$t('中小企業の皆様へ'),
+          link: 'https://oita-chusho.jp/pc/corona/',
+          divider: true
+        },
+        {
           title: this.$t('大分県 新型コロナウイルスに関するお知らせ'),
           link: 'http://www.pref.oita.jp/'
         },
