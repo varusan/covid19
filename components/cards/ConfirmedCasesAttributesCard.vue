@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Data from '@/data/data.json'
+import Data from '@/data/json/data.json'
 import formatGraph from '@/utils/formatGraph'
 import formatTable from '@/utils/formatTable'
 import DataTable from '@/components/DataTable.vue'

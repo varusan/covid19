@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Data from '@/data/data.json'
+import Data from '@/data/json/data.json'
 import formatConfirmedCases from '@/utils/formatConfirmedCases'
 import SvgCard from '@/components/SvgCard.vue'
 import ConfirmedCasesTable from '@/components/ConfirmedCasesTable.vue'

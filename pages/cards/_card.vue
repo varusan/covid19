@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import Data from '@/data/data.json'
+import Data from '@/data/json/data.json'
 import MetroData from '@/data/metro.json'
 import agencyData from '@/data/agency.json'
 import ConfirmedCasesDetailsCard from '@/components/cards/ConfirmedCasesDetailsCard.vue'

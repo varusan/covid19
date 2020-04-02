@@ -15,7 +15,7 @@
 <script>
 import formatVariableGraph from '@/utils/formatVariableGraph.ts'
 import CircleChartForAge from '@/components/CircleChartForAge.vue'
-import Data from '@/data/data.json'
+import Data from '@/data/json/data.json'
 
 export default {
   components: {

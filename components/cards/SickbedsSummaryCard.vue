@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Data from '@/data/data.json'
+import Data from '@/data/json/data.json'
 import formatVariableGraph from '@/utils/formatVariableGraph.ts'
 import CircleChart from '@/components/CircleChart.vue'
 import sickbedsSummary from '@/data/sickbeds_summary.json'
