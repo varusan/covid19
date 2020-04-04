@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      - name: Pull submodule latest commit
+        run: |
+          git submodule update -i
+          cd data/ && git checkout master
 
       - name: Setup Python
         uses: actions/setup-python@v1
